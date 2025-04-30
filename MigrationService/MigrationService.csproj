@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-MigrationService-845a2fa8-e1c7-4ec3-9a93-94b93dc93546</UserSecretsId>
+  </PropertyGroup>
+
+    <ItemGroup>
+	    <PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="9.1.0" />
+	    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
+    </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\AspireProject.ServiceDefaults\AspireProject.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Database\EFModels.csproj" />
+  </ItemGroup>
+</Project>

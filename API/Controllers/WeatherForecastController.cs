@@ -1,4 +1,4 @@
-using Database.models;
+using EFModels.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -35,6 +35,6 @@ public class WeatherForecastController : ControllerBase
     public bool SaveForecast([FromBody] IEnumerable<WeatherForecast> forecast)
     {
 
-
+        return false;
     }
 }

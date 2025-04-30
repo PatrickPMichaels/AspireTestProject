@@ -16,11 +16,16 @@
     <PackageReference Include="Aspire.Hosting.Azure.Storage" Version="9.2.1" />
     <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.2.1" />
     <PackageReference Include="Aspire.Hosting.SqlServer" Version="9.2.1" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\API\API.csproj" />
-    <ProjectReference Include="..\Database\EntityFramework.csproj" />
+    <ProjectReference Include="..\Database\EFModels.csproj" IsAspireProjectResource="false"/>
     <ProjectReference Include="..\Functions\Functions.csproj" />
     <ProjectReference Include="..\MigrationService\MigrationService.csproj" />
   </ItemGroup>

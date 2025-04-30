@@ -5,6 +5,8 @@ var sql = builder.AddSqlServer("sql")
     .WithLifetime(ContainerLifetime.Persistent)
     .WithDataVolume("aspire-dbVolume");
 
+var db = sql.AddDatabase("database");
+
 var serviceBus = builder.AddAzureServiceBus("serviceBus")
     .RunAsEmulator()
     .AddServiceBusQueue("Test-queue");
@@ -12,12 +14,6 @@ var serviceBus = builder.AddAzureServiceBus("serviceBus")
 var storage = builder.AddAzureStorage("storage")
     .RunAsEmulator()
     .AddBlobs("Aspire-Blobs");
-
-var db = sql.AddDatabase("database");
-
-var migrations = builder.AddProject<Projects.Database>("database")
-    .WithReference(db)
-    .WaitFor(db);
 
 var api = builder.AddProject<Projects.API>("api")
     .WithExternalHttpEndpoints()
