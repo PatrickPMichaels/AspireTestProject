@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AspireProject.ServiceDefaults\AspireProject.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Database\EntityFramework.csproj" />
   </ItemGroup>
 
 </Project>
