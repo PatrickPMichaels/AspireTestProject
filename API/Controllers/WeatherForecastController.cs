@@ -1,3 +1,5 @@
+using Azure.Messaging.ServiceBus;
+using EFModels.Contexts;
 using EFModels.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -5,19 +7,17 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class WeatherForecastController(
+    ILogger<WeatherForecastController> logger, 
+    WeatherForecastDbContext context,
+    ServiceBusClient serviceBus
+    ) 
+    : ControllerBase
 {
     private static readonly string[] Summaries =
     [
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     ];
-
-    private readonly ILogger<WeatherForecastController> _logger;
-
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
-    {
-        _logger = logger;
-    }
 
     [HttpGet]
     public IEnumerable<WeatherForecast> Get()
@@ -32,9 +32,19 @@ public class WeatherForecastController : ControllerBase
     }
 
     [HttpPost]
-    public bool SaveForecast([FromBody] IEnumerable<WeatherForecast> forecast)
+    public ActionResult SaveForecast([FromBody] IEnumerable<WeatherForecast> forecast)
     {
+        context.AddRange(forecast);
+        context.SaveChanges();
+        
+        return Ok();
+    }
 
-        return false;
+    [HttpPost("Message")]
+    public async Task<ActionResult> SendMessageOnBus([FromBody] string message) {
+        await serviceBus.CreateSender("Api-Function")
+            .SendMessageAsync(new ServiceBusMessage(message));
+
+        return Ok();
     }
 }

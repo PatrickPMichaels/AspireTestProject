@@ -1,12 +1,16 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var serviceBus = builder.AddAzureServiceBus("serviceBus")
-    .RunAsEmulator()
-    .AddServiceBusQueue("Test-queue");
+var serviceBus = builder.AddAzureServiceBus("Test-SB")
+    .RunAsEmulator();
+    
+var queue = serviceBus.AddServiceBusQueue("Api-Function");
+serviceBus.AddServiceBusQueue("Inter-Function");
+serviceBus.AddServiceBusQueue("No-Consumer");
 
 var storage = builder.AddAzureStorage("storage")
-    .RunAsEmulator()
-    .AddBlobs("Aspire-Blobs");
+    .RunAsEmulator();
+
+var blobs = storage.AddBlobs("Aspire-Blobs");
 
 var sql = builder.AddSqlServer("sql")
     .WithContainerName("Aspire-SQL")
@@ -37,6 +41,8 @@ builder.AddProject<Projects.Functions>("functions")
     .WithReference(db)
     .WaitFor(migrations)
     .WithReference(serviceBus)
-    .WithReference(storage);
+    .WithReference(queue)
+    .WithReference(blobs)
+    .WithExternalHttpEndpoints();
 
 builder.Build().Run();

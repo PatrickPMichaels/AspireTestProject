@@ -3,11 +3,10 @@ using Microsoft.Extensions.Hosting;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
-builder.ConfigureFunctionsWebApplication();
+builder.AddServiceDefaults();
 
-// Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
-// builder.Services
-//     .AddApplicationInsightsTelemetryWorkerService()
-//     .ConfigureFunctionsApplicationInsights();
+builder.AddAzureBlobClient("Aspire-Blobs");
+
+builder.ConfigureFunctionsWebApplication();
 
 builder.Build().Run();

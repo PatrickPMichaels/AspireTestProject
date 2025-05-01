@@ -7,9 +7,10 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.AddSqlServerDbContext<WeatherForecastDbContext>("database");
         
         builder.AddServiceDefaults();
+        builder.AddSqlServerDbContext<WeatherForecastDbContext>("database");
+        builder.AddAzureServiceBusClient("Test-SB");
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -4,6 +4,7 @@ import { Forecast } from "./models/Forecast";
 
 function App() {
     const [forecasts, setForecasts] = useState<Array<Forecast>>([]);
+    const [message, setMessage] = useState<string>();
 
     const requestWeather = async () => {
         const weather = await fetch("api/weatherforecast");
@@ -18,6 +19,26 @@ function App() {
     useEffect(() => {
         requestWeather();
     }, []);
+
+    const saveForecast = () => {
+        fetch("api/weatherforecast", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(forecasts)
+        });
+    }
+
+    const sendMessage = () => {
+        fetch("api/weatherforecast/message", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(message)
+        });
+    }
 
     return (
         <div className="App">
@@ -54,6 +75,17 @@ function App() {
                         })}
                     </tbody>
                 </table>
+                <button onClick={saveForecast}>
+                    Save Forecast
+                </button>
+
+                <div style={{marginTop:"2em"}}>
+                    <label style={{marginRight:"1em"}} htmlFor="message">Message:</label>
+                    <input style={{ marginRight: "1em" }} type="text" id="name" name="message" value={message} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setMessage(e.target.value)} />
+                    <button onClick={sendMessage}>
+                        Send Message
+                    </button>
+                </div>
             </header>
         </div>
     );
