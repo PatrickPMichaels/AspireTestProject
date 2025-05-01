@@ -10,7 +10,7 @@ public class Program
         
         builder.AddServiceDefaults();
         builder.AddSqlServerDbContext<WeatherForecastDbContext>("database");
-        builder.AddAzureServiceBusClient("Test-SB");
+        builder.AddAzureServiceBusClient("TestSB");
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

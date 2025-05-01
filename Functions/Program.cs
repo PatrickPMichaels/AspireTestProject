@@ -5,7 +5,7 @@ var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.AddAzureBlobClient("Aspire-Blobs");
+builder.AddAzureBlobClient("AspireBlobs");
 
 builder.ConfigureFunctionsWebApplication();
 

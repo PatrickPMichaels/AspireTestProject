@@ -1,16 +1,14 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var serviceBus = builder.AddAzureServiceBus("Test-SB")
-    .RunAsEmulator();
+var serviceBus = builder.AddAzureServiceBus("TestSB")
+    .RunAsEmulator(c => c.WithLifetime(ContainerLifetime.Persistent));
     
-var queue = serviceBus.AddServiceBusQueue("Api-Function");
-serviceBus.AddServiceBusQueue("Inter-Function");
-serviceBus.AddServiceBusQueue("No-Consumer");
+var queue = serviceBus.AddServiceBusQueue("ApiFunction");
 
 var storage = builder.AddAzureStorage("storage")
-    .RunAsEmulator();
+    .RunAsEmulator(c => c.WithLifetime(ContainerLifetime.Persistent));
 
-var blobs = storage.AddBlobs("Aspire-Blobs");
+var blobs = storage.AddBlobs("AspireBlobs");
 
 var sql = builder.AddSqlServer("sql")
     .WithContainerName("Aspire-SQL")
@@ -27,7 +25,8 @@ var api = builder.AddProject<Projects.API>("api")
     .WithExternalHttpEndpoints()
     .WithReference(db)
     .WaitFor(migrations)
-    .WithReference(serviceBus);
+    .WithReference(serviceBus)
+    .WaitFor(queue);
 
 builder.AddNpmApp("reactvite", "../frontend")
     .WithReference(api)
@@ -41,8 +40,8 @@ builder.AddProject<Projects.Functions>("functions")
     .WithReference(db)
     .WaitFor(migrations)
     .WithReference(serviceBus)
-    .WithReference(queue)
+    .WaitFor(queue)
     .WithReference(blobs)
-    .WithExternalHttpEndpoints();
+    .WaitFor(blobs);
 
 builder.Build().Run();

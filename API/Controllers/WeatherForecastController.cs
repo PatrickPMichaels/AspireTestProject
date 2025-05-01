@@ -42,7 +42,7 @@ public class WeatherForecastController(
 
     [HttpPost("Message")]
     public async Task<ActionResult> SendMessageOnBus([FromBody] string message) {
-        await serviceBus.CreateSender("Api-Function")
+        await serviceBus.CreateSender("ApiFunction")
             .SendMessageAsync(new ServiceBusMessage(message));
 
         return Ok();
