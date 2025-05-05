@@ -3,7 +3,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFModels.Contexts;
 
-public class WeatherForecastDbContext(DbContextOptions<WeatherForecastDbContext> options) : DbContext(options)
+public class WeatherForecastDbContext: DbContext
 {
+    public WeatherForecastDbContext(): base(new DbContextOptions<WeatherForecastDbContext>())
+    {
+    }
+
+    public WeatherForecastDbContext(DbContextOptions<WeatherForecastDbContext> options): base(options)
+    {
+    }
+
     public DbSet<WeatherForecast> Forecasts => Set<WeatherForecast>();
 }

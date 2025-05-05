@@ -9,8 +9,8 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController(
     ILogger<WeatherForecastController> logger, 
-    WeatherForecastDbContext context,
-    ServiceBusClient serviceBus
+    WeatherForecastDbContext dbContext,
+    ServiceBusClient serviceBusClient
     ) 
     : ControllerBase
 {
@@ -32,17 +32,17 @@ public class WeatherForecastController(
     }
 
     [HttpPost]
-    public ActionResult SaveForecast([FromBody] IEnumerable<WeatherForecast> forecast)
+    public async Task<ActionResult> SaveForecast([FromBody] IEnumerable<WeatherForecast> forecast)
     {
-        context.AddRange(forecast);
-        context.SaveChanges();
+        dbContext.AddRange(forecast);
+        await dbContext.SaveChangesAsync();
         
         return Ok();
     }
 
     [HttpPost("Message")]
     public async Task<ActionResult> SendMessageOnBus([FromBody] string message) {
-        await serviceBus.CreateSender("ApiFunction")
+        await serviceBusClient.CreateSender("ApiFunction")
             .SendMessageAsync(new ServiceBusMessage(message));
 
         return Ok();
