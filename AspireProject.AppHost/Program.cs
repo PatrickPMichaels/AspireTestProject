@@ -1,12 +1,12 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var serviceBus = builder.AddAzureServiceBus("TestSB")
-    .RunAsEmulator(c => c.WithLifetime(ContainerLifetime.Persistent));
+    .RunAsEmulator();
     
 var queue = serviceBus.AddServiceBusQueue("ApiFunction");
 
 var storage = builder.AddAzureStorage("storage")
-    .RunAsEmulator(c => c.WithLifetime(ContainerLifetime.Persistent));
+    .RunAsEmulator();
 
 var blobs = storage.AddBlobs("AspireBlobs");
 
@@ -33,10 +33,9 @@ builder.AddNpmApp("reactvite", "../frontend")
     .WaitFor(api)
     .WithEnvironment("BROWSER", "none")
     .WithHttpEndpoint(env: "VITE_PORT")
-    .WithExternalHttpEndpoints()
-    .PublishAsDockerFile();
+    .WithExternalHttpEndpoints();
 
-builder.AddProject<Projects.Functions>("functions")
+builder.AddAzureFunctionsProject<Projects.Functions>("functions")
     .WithReference(db)
     .WaitFor(migrations)
     .WithReference(serviceBus)
