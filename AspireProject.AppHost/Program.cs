@@ -1,12 +1,12 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var serviceBus = builder.AddAzureServiceBus("TestSB")
-    .RunAsEmulator();
+    .RunAsEmulator(c => c.WithContainerName("Aspire-ServiceBus"));
     
 var queue = serviceBus.AddServiceBusQueue("ApiFunction");
 
 var storage = builder.AddAzureStorage("storage")
-    .RunAsEmulator();
+    .RunAsEmulator(c => c.WithContainerName("Aspire-Storage"));
 
 var blobs = storage.AddBlobs("AspireBlobs");
 
